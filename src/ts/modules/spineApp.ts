@@ -61,7 +61,7 @@ export class SpineApp implements spine.SpineCanvasApp {
   render = (canvas: spine.SpineCanvas) => {
     if (!(this.skeleton instanceof spine.Skeleton)) return
 
-    // レンダリング制御用オブジェクト
+    // レンダラーを取得
     const renderer = canvas.renderer
 
     // 画面リサイズ。（ブラウザサイズが変更された時の対応）
