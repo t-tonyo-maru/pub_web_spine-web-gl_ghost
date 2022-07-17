@@ -19,27 +19,27 @@ export class SpineApp implements spine.SpineCanvasApp {
 
     // テクスチャアトラスを生成
     const atlas = canvas.assetManager.require('model.atlas')
-    // AtlasAttachmentLoader（リージョン、メッシュ、バウンディングボックス、パスのアタッチメントを解決するための要素）を生成
+    // AtlasAttachmentLoader（リージョン、メッシュ、バウンディングボックス、パスのアタッチメントを解決するための要素）のインスタンスを生成
     const atlasLoader = new spine.AtlasAttachmentLoader(atlas)
     // skeleton(json 形式) を読み込むためのオブジェクトを生成
     const skeltonJson = new spine.SkeletonJson(atlasLoader)
-    // skeleton(json 形式) を読み込む
+    // skeleton 情報を読み込み
     const skeltonData = skeltonJson.readSkeletonData(
       assetManager.require('model.json')
     )
-    // skeleton インスタンスを生成
+    // skeleton インスタンスを生成して、メンバにセット
     this.skeleton = new spine.Skeleton(skeltonData)
 
     if (this.skeleton instanceof spine.Skeleton) {
       // skeleton の位置を画面中央にセット
       this.skeleton.x = 0
       this.skeleton.y = (-1 * Math.floor(this.skeleton.data.height)) / 2
-      // skeleton の大きさを等倍でセット
+      // skeleton の大きさを等倍にセット
       this.skeleton.scaleX = 1
       this.skeleton.scaleY = 1
     }
 
-    // skeleton(json ファイル)からアニメーション情報を取得
+    // skeleton 情報からアニメーション情報を取得
     const stateData = new spine.AnimationStateData(skeltonData)
     // アニメーションをセット
     this.state = new spine.AnimationState(stateData)
@@ -61,15 +61,16 @@ export class SpineApp implements spine.SpineCanvasApp {
   render = (canvas: spine.SpineCanvas) => {
     if (!(this.skeleton instanceof spine.Skeleton)) return
 
-    // レンダリング制御
+    // レンダリング制御用オブジェクト
     const renderer = canvas.renderer
-    // 画面リサイズ
+
+    // 画面リサイズ。（ブラウザサイズが変更された時の対応）
     renderer.resize(spine.ResizeMode.Expand)
     // 画面クリア
     canvas.clear(0.2, 0.2, 0.2, 1)
     // 描画開始
     renderer.begin()
-    // skeleton を画面に描画
+    // skeleton を描画
     renderer.drawSkeleton(this.skeleton)
     // 描画終了
     renderer.end()
